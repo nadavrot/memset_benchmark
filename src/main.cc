@@ -4,16 +4,47 @@
 
 #include "timer_utils.h"
 
-void test() {
-  TimerGuard T("simple");
-  std::vector<char> memory(1000, 0);
+#define ITER (1000 * 1000 * 100)
 
-  for (int i = 0; i < 10000 * 109; i++) {
-    memset(&memory[0], 0, memory.size());
+/// Alligns the pointer \p ptr, to alignment \p alignment and offset \p offset
+/// within the word.
+void *align_pointer(void *ptr,unsigned alignment, unsigned offset) {
+  size_t p = (size_t)ptr;
+  while (p % alignment)
+    ++p;
+  return (void *)(p + (size_t)offset);
+}
+
+/// Generate a textual representation of the parameters.
+std::string params_to_entry(const std::string &name, unsigned size,
+                            unsigned alignment, unsigned offset) {
+  return name + ", " + std::to_string(size) + ", " + std::to_string(alignment) +
+         ", " + std::to_string(offset) + ", ";
+}
+
+// Allocate memory and benchmark a single implementation.
+void test(unsigned SIZE, unsigned ALIGN, unsigned OFFSET) {
+  TimerGuard T(params_to_entry("simple", SIZE, ALIGN, OFFSET), SIZE);
+  std::vector<char> memory(SIZE + 256, 0);
+
+  void *ptr = align_pointer(&memory[0], ALIGN, OFFSET);
+
+  for (int i = 0; i < ITER; i++) {
+    memset(ptr, 0, SIZE);
   }
 }
 
 int main(int argc, char **argv) {
-  test();
+  std::cout<<"Name, size, alignment, offset,\n";
+
+  test(1000, 16, 0);
+  test(2000, 16, 0);
+  test(3000, 16, 0);
+  test(1000, 16, 0);
+  test(2000, 16, 0);
+  test(3000, 16, 0);
+  test(1000, 16, 1);
+  test(2000, 16, 1);
+  test(3000, 16, 1);
   return 0;
 }
