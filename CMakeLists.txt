@@ -10,6 +10,9 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # to analyze the source code of the project.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+# Disable exceptions
+SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fno-rtti ")
+
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   message(STATUS "No build type selected, default to Release")
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type (default RelWithDebInfo)" FORCE)
