@@ -10,6 +10,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # to analyze the source code of the project.
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+enable_language(C ASM)
+
 # Disable exceptions
 SET (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fno-rtti ")
 
@@ -32,6 +34,7 @@ include_directories(BEFORE
 
 add_executable(bench_memset
                  src/main.cc
+                 src/calls.s
                  )
 
 target_link_libraries(bench_memset
