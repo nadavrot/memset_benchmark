@@ -2,8 +2,6 @@ cmake_minimum_required(VERSION 3.7)
 
 project(bpf_tracer VERSION 1.0.0 DESCRIPTION "Memset benchmarks")
 
-SET (CMAKE_CXX_COMPILER             "/usr/bin/clang++")
-
 set(CMAKE_CXX_STANDARD 14)
 set(CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -22,7 +20,7 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
   set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Build type (default RelWithDebInfo)" FORCE)
 endif()
 
-add_compile_options(-Wall -g3 -O3)
+add_compile_options(-Wall -g3 -O3 -march=native)
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Wall -march=native")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fno-omit-frame-pointer -O0")

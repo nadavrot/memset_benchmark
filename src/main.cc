@@ -26,8 +26,8 @@ void *align_pointer(void *ptr,unsigned alignment, unsigned offset) {
 /// Generate a textual representation of the parameters.
 std::string params_to_entry(const std::string &name, unsigned size,
                             unsigned alignment, unsigned offset) {
-  return name + ", " + std::to_string(size) + ", " + std::to_string(alignment) +
-         ", " + std::to_string(offset) + ", ";
+  return name + ",\t" + std::to_string(size) + ", " +
+         std::to_string(alignment) + ", " + std::to_string(offset) + ", ";
 }
 
 // Allocate memory and benchmark a single implementation.
