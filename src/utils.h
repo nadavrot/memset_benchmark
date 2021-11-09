@@ -1,17 +1,13 @@
 #ifndef UTILS
 #define UTILS
 
-#define NO_INLINE __attribute__((noinline))
-
-#ifdef __clang__
-typedef char char16 __attribute__((ext_vector_type(16)));
-typedef char char32 __attribute__((ext_vector_type(32)));
-
-#endif
-
-#ifdef __GNUC__
-typedef char char16 __attribute__((vector_size(16)));
-typedef char char32 __attribute__((vector_size(32)));
-#endif
+/// Aligns the pointer \p ptr, to alignment \p alignment and offset \p offset
+/// within the word.
+void *align_pointer(void *ptr, unsigned alignment, unsigned offset) {
+  size_t p = (size_t)ptr;
+  while (p % alignment)
+    ++p;
+  return (void *)(p + (size_t)offset);
+}
 
 #endif // UTILS

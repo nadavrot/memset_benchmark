@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "timer_utils.h"
+#include "utils.h"
 
 #define ITER (1000 * 1000 * 1000)
 
@@ -13,15 +14,6 @@ void *local_memset(void *s, int c, size_t n);
 }
 
 using memset_ty = void *(void *s, int c, size_t n);
-
-/// Alligns the pointer \p ptr, to alignment \p alignment and offset \p offset
-/// within the word.
-void *align_pointer(void *ptr,unsigned alignment, unsigned offset) {
-  size_t p = (size_t)ptr;
-  while (p % alignment)
-    ++p;
-  return (void *)(p + (size_t)offset);
-}
 
 /// Generate a textual representation of the parameters.
 std::string params_to_entry(const std::string &name, unsigned size,

@@ -40,9 +40,14 @@ add_executable(bench_memset
                  src/lib.c
                  )
 
-target_link_libraries(bench_memset
-                      PUBLIC
-                     )
+add_executable(test_memset
+                 src/test.cc
+                 src/calls.s
+                 src/lib.c
+                 )
+
+target_link_libraries(bench_memset PUBLIC)
+target_link_libraries(test_memset PUBLIC)
 
 install(TARGETS bench_memset DESTINATION bin)
-
+install(TARGETS test_memset DESTINATION bin)
