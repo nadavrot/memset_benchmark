@@ -32,19 +32,24 @@ void bench_impl(memset_ty handle0, memset_ty handle1, unsigned SIZE,
   std::vector<char> memory(SIZE + 256, 0);
   void *ptr = align_pointer(&memory[0], ALIGN, OFFSET);
 
+  uint64_t t0, t1;
+
   {
-    TimerGuard T(SIZE);
+    Stopwatch T;
     for (int i = 0; i < ITER; i++) {
       (handle0)(ptr, 0, SIZE);
     }
+    t0 = T.getTimeDelta();
   }
 
   {
-    TimerGuard T(SIZE);
+    Stopwatch T;
     for (int i = 0; i < ITER; i++) {
       (handle1)(ptr, 0, SIZE);
     }
+    t1 = T.getTimeDelta();
   }
+  std::cout << t0 << ", " << t1 << ", " << (double(t0) / (t1)) << ",";
 }
 
 int main(int argc, char **argv) {

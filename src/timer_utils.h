@@ -9,23 +9,19 @@
 
 using time_point = std::chrono::steady_clock::time_point;
 
-class TimerGuard {
-  size_t div_;
+class Stopwatch {
   time_point begin_;
 
 public:
   NO_INLINE
-  TimerGuard(size_t div) : div_(div) {
-    begin_ = std::chrono::steady_clock::now();
-  }
+  Stopwatch() : begin_(std::chrono::steady_clock::now()) {}
 
+  /// \returns the time delta microseconds.
   NO_INLINE
-  ~TimerGuard() {
+  uint64_t getTimeDelta() {
     time_point end = std::chrono::steady_clock::now();
-    auto delta =
-        std::chrono::duration_cast<std::chrono::microseconds>(end - begin_)
-            .count();
-    std::cout << uint64_t(double(delta) / div_) << ", ";
+    return std::chrono::duration_cast<std::chrono::microseconds>(end - begin_)
+        .count();
   }
 };
 
