@@ -45,56 +45,71 @@ inline void *small_memset(void *s, int c, size_t n) {
     return s;
   }
 
-  char X = c;
+  uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
+  char *first = s;
+  char *second = s + n / 2 - 8;
+  char *third = s + n / 2;
+  char *fourth = s + n - 8;
+  *((uint64_t *)first) = val8;
+  *((uint64_t *)second) = val8;
+  *((uint64_t *)third) = val8;
+  *((uint64_t *)fourth) = val8;
+  return s;
+}
+
+void *huge_memset(void *s, int c, size_t n) {
   char *p = s;
-  char16 val16 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
-  while (n >= 16) {
-    *((char16 *)p) = val16;
-    p += 16;
-    n -= 16;
+  char X = c;
+  char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
+                  X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
+
+  // Stamp the first 32byte store.
+  *((char32 *)p) = val32;
+
+  char *first_aligned = p + 32 - ((uint64_t)p % 32);
+  char *buffer_end = p + n;
+  char *last_word = buffer_end - 32;
+
+  // Align the next stores.
+  p = first_aligned;
+
+  while (p + 32 < buffer_end) {
+    *((char32 *)p) = val32;
+    p += 32;
   }
 
-  return scalar_memset(p, c, n);
+  *((char32 *)last_word) = val32;
+  return s;
 }
+
 void *local_memset(void *s, int c, size_t n) {
   char *p = s;
   char X = c;
 
-  if (n < 32) {
+  if (n <= 32) {
     return small_memset(s, c, n);
   }
 
-  // if (n == 0) return s;
-  if (n >= 32) {
-    char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
-                    X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
-    while (n >= 32) {
-      *((char32 *)p) = val32;
-      p += 32;
-      n -= 32;
-    }
+  if (n > 128) {
+    return huge_memset(s, c, n);
   }
 
-  /*
-    if (n >= 16) {
-      char16 val16 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
-      while (n >= 16) {
-        *((char16 *)p) = val16;
-        p += 16;
-        n -= 16;
-      }
-    }*/
+  // n >= 32!
+  char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
+                  X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
 
-  if (n >= 8) {
-    uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
-    while (n >= 8) {
-      *((uint64_t *)p) = val8;
-      p += 8;
-      n -= 8;
-    }
+  // Stamp the last 32 bytes of the buffer.
+  char *last = s + n - 32;
+  *((char32 *)last) = val32;
+
+  // Stamp the first section of the buffer.
+  while (n >= 32) {
+    *((char32 *)p) = val32;
+    p += 32;
+    n -= 32;
   }
 
-  return scalar_memset(p, c, n);
+  return s;
 }
 
 void *musl_memset(void *dest, int c, size_t n) {
