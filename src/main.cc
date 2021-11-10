@@ -1,4 +1,5 @@
 #include <cstring>
+#include <iomanip>
 #include <iostream>
 #include <vector>
 
@@ -24,27 +25,39 @@ std::string params_to_entry(const std::string &name, unsigned size,
 }
 
 // Allocate memory and benchmark a single implementation.
-void bench_impl(memset_ty handle, const std::string &name, unsigned SIZE,
+void bench_impl(memset_ty handle0, memset_ty handle1, unsigned SIZE,
                 unsigned ALIGN, unsigned OFFSET) {
-  TimerGuard T(params_to_entry(name, SIZE, ALIGN, OFFSET), SIZE);
+  std::cout << SIZE << ", " << ALIGN << ", " << OFFSET << ", ";
+
   std::vector<char> memory(SIZE + 256, 0);
   void *ptr = align_pointer(&memory[0], ALIGN, OFFSET);
 
-  for (int i = 0; i < ITER; i++) {
-    (handle)(ptr, 0, SIZE);
+  {
+    TimerGuard T(SIZE);
+    for (int i = 0; i < ITER; i++) {
+      (handle0)(ptr, 0, SIZE);
+    }
+  }
+
+  {
+    TimerGuard T(SIZE);
+    for (int i = 0; i < ITER; i++) {
+      (handle1)(ptr, 0, SIZE);
+    }
   }
 }
 
 int main(int argc, char **argv) {
-  std::cout<<"Name, size, alignment, offset,\n";
+  std::cout << std::fixed << "Size, Alignment, Offset, libc , local\n";
 
-#define BENCH(FUNC, SIZE, ALIGN, OFFSET)                                       \
-  bench_impl(FUNC, #FUNC, SIZE, ALIGN, OFFSET);
+  for (int i = 1; i < 16; i++) {
+    bench_impl(libc_memset, local_memset, i, 16, 0);
+    std::cout << "\n";
+  }
 
   for (int sz2 = 0; sz2 < 10; sz2++) {
-    BENCH(libc_memset, 8 << sz2, 16, 0);
-    BENCH(local_memset, 8 << sz2, 16, 0);
-    BENCH(musl_memset, 8 << sz2, 16, 0);
+    bench_impl(libc_memset, local_memset, 8 << sz2, 16, 0);
+    std::cout << "\n";
   }
 
   return 0;

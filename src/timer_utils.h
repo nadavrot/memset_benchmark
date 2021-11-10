@@ -10,13 +10,12 @@
 using time_point = std::chrono::steady_clock::time_point;
 
 class TimerGuard {
-  std::string msg_;
   size_t div_;
   time_point begin_;
 
 public:
   NO_INLINE
-  TimerGuard(const std::string &msg, size_t div) : msg_(msg), div_(div) {
+  TimerGuard(size_t div) : div_(div) {
     begin_ = std::chrono::steady_clock::now();
   }
 
@@ -26,7 +25,7 @@ public:
     auto delta =
         std::chrono::duration_cast<std::chrono::microseconds>(end - begin_)
             .count();
-    std::cout << msg_ << " " << double(delta) / div_ << "\n";
+    std::cout << uint64_t(double(delta) / div_) << ", ";
   }
 };
 
