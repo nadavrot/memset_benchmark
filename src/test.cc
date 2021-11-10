@@ -12,6 +12,7 @@ extern "C" {
 void *memset(void *s, int c, size_t n);
 void *libc_memset(void *s, int c, size_t n);
 void *local_memset(void *s, int c, size_t n);
+void *musl_memset(void *s, int c, size_t n);
 }
 
 using memset_ty = void *(void *s, int c, size_t n);
@@ -63,6 +64,7 @@ int main(int argc, char **argv) {
   for (int i = 0; i < 256; i++) {
     TEST(libc_memset, i);
     TEST(local_memset, i);
+    TEST(musl_memset, i);
   }
 
   return 0;
