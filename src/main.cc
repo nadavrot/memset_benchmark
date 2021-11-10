@@ -55,13 +55,15 @@ void bench_impl(memset_ty handle0, memset_ty handle1, unsigned SIZE,
 int main(int argc, char **argv) {
   std::cout << std::fixed << "Size, Alignment, Offset, libc , local\n";
 
-  for (int i = 1; i < 16; i++) {
-    bench_impl(libc_memset, local_memset, i, 16, 0);
+  for (int i = 1; i < 32; i++) {
+    // bench_impl(libc_memset, local_memset, i, 16, 0);
     std::cout << "\n";
   }
 
   for (int sz2 = 0; sz2 < 10; sz2++) {
-    bench_impl(libc_memset, local_memset, 8 << sz2, 16, 0);
+    bench_impl(libc_memset, local_memset, (8 << sz2), 16, 0);
+    std::cout << "\n";
+    bench_impl(libc_memset, local_memset, (8 << sz2) + 15, 16, 0);
     std::cout << "\n";
   }
 

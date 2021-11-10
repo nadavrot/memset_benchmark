@@ -47,9 +47,6 @@ void assert_uniform_value(const char *start, const char *end, char val) {
 
 void test_impl(memset_ty handle, const std::string &name, unsigned chunk_size) {
   std::vector<char> memory(chunk_size + 256, MAGIC_VALUE0);
-
-  std::cout << "Testing " << name << " of size " << chunk_size << "\n";
-
   // Start mem-setting the array at different offsets.
   for (int offset = 0; offset < 64; offset++) {
     const char *buffer_start = &*memory.begin();
@@ -76,15 +73,16 @@ void test_impl(memset_ty handle, const std::string &name, unsigned chunk_size) {
 }
 
 int main(int argc, char **argv) {
-  std::cout << "Name, size, alignment, offset,\n";
+  std::cout << "Testing memset... \n";
 
 #define TEST(FUNC, SIZE) test_impl(FUNC, #FUNC, SIZE);
 
-  for (int i = 0; i < 256; i++) {
+  for (int i = 0; i < 1024; i++) {
     TEST(libc_memset, i);
     TEST(local_memset, i);
     TEST(musl_memset, i);
   }
+  std::cout << "Done.\n";
 
   return 0;
 }
