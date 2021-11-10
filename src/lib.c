@@ -12,28 +12,84 @@ inline void *scalar_memset(void *s, int c, size_t n) {
   return s;
 }
 
+inline void *small_memset(void *s, int c, size_t n) {
+  if (n < 5) {
+      if (n == 0) return s;
+      char *p = s;
+      p[0] = c;
+      p[n - 1] = c;
+      if (n <= 2)
+        return s;
+      p[1] = c;
+      p[2] = c;
+      p[n - 2] = c;
+      p[n - 3] = c;
+      if (n <= 6)
+        return s;
+      p[3] = c;
+      p[n - 4] = c;
+      if (n <= 8)
+        return s;
+    //return scalar_memset(s, c, n);
+  }
+
+  if (n < 8) {
+    uint32_t val4 = ((uint64_t)0x01010101L * ((uint8_t)c));
+    char *first = s;
+    char *last = s + n - 4;
+    *((uint32_t *)first) = val4;
+    *((uint32_t *)last) = val4;
+    return s;
+  }
+
+  if (n < 16) {
+    uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
+    char *first = s;
+    char *last = s + n - 8;
+    *((uint64_t *)first) = val8;
+    *((uint64_t *)last) = val8;
+    return s;
+  }
+
+  return scalar_memset(s, c, n);
+
+  return s;
+}
 void *local_memset(void *s, int c, size_t n) {
   char *p = s;
   char X = c;
 
-  if (n >= 16) {
+  if (n < 64) {
+    return small_memset(s, c, n);
+  }
 
-    if (n >= 32) {
-      char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
-                      X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
-      while (n >= 32) {
-        *((char32 *)p) = val32;
-        p += 32;
-        n -= 32;
-      }
+  // if (n == 0) return s;
+  if (n >= 32) {
+    char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
+                    X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
+    while (n >= 32) {
+      *((char32 *)p) = val32;
+      p += 32;
+      n -= 32;
     }
+  }
 
-    char16 val16 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
+  /*
+    if (n >= 16) {
+      char16 val16 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
+      while (n >= 16) {
+        *((char16 *)p) = val16;
+        p += 16;
+        n -= 16;
+      }
+    }*/
 
-    while (n >= 16) {
-      *((char16 *)p) = val16;
-      p += 16;
-      n -= 16;
+  if (n >= 8) {
+    uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
+    while (n >= 8) {
+      *((uint64_t *)p) = val8;
+      p += 8;
+      n -= 8;
     }
   }
 
