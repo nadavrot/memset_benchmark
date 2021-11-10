@@ -25,25 +25,18 @@ inline void *small_memset(void *s, int c, size_t n) {
     p[2] = c;
     p[n - 2] = c;
     p[n - 3] = c;
-    if (n <= 6)
-      return s;
-    p[3] = c;
-    p[n - 4] = c;
-    if (n <= 8)
-      return s;
-    // return scalar_memset(s, c, n);
-  }
-
-  if (n < 8) {
-    uint32_t val4 = ((uint64_t)0x01010101L * ((uint8_t)c));
-    char *first = s;
-    char *last = s + n - 4;
-    *((uint32_t *)first) = val4;
-    *((uint32_t *)last) = val4;
     return s;
   }
 
-  if (n < 16) {
+  if (n <= 16) {
+    if (n <= 8) {
+      uint32_t val4 = ((uint64_t)0x01010101L * ((uint8_t)c));
+      char *first = s;
+      char *last = s + n - 4;
+      *((uint32_t *)first) = val4;
+      *((uint32_t *)last) = val4;
+      return s;
+    }
     uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
     char *first = s;
     char *last = s + n - 8;
@@ -52,15 +45,22 @@ inline void *small_memset(void *s, int c, size_t n) {
     return s;
   }
 
-  return scalar_memset(s, c, n);
+  char X = c;
+  char *p = s;
+  char16 val16 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
+  while (n >= 16) {
+    *((char16 *)p) = val16;
+    p += 16;
+    n -= 16;
+  }
 
-  return s;
+  return scalar_memset(p, c, n);
 }
 void *local_memset(void *s, int c, size_t n) {
   char *p = s;
   char X = c;
 
-  if (n < 64) {
+  if (n < 32) {
     return small_memset(s, c, n);
   }
 
