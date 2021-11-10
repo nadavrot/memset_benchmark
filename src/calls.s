@@ -1,7 +1,6 @@
 .text
-.global libc_memset
+.global _libc_memset
 .p2align  4, 0x90
-libc_memset:
-        call memset
-        ret
+_libc_memset:
+        jmp _memset
 
