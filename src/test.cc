@@ -19,19 +19,19 @@ using memset_ty = void *(void *s, int c, size_t n);
 
 void print_buffer(const char *start, const char *end, char val,
                   const char *ptr) {
-  const char* it = start;
+  const char *it = start;
   while (it != end) {
     std::cout << *it;
     it++;
   }
-  std::cout<<"\n";
+  std::cout << "\n";
   it = start;
   while (it != ptr) {
     std::cout << " ";
     it++;
   }
-  std::cout<<"^\n";
-  std::cout<<"expected \"" << val << "\" at index " << ptr - start << "\n";
+  std::cout << "^\n";
+  std::cout << "expected \"" << val << "\" at index " << ptr - start << "\n";
 }
 
 void assert_uniform_value(const char *start, const char *end, char val) {

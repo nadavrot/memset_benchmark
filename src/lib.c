@@ -14,23 +14,24 @@ inline void *scalar_memset(void *s, int c, size_t n) {
 
 inline void *small_memset(void *s, int c, size_t n) {
   if (n < 5) {
-      if (n == 0) return s;
-      char *p = s;
-      p[0] = c;
-      p[n - 1] = c;
-      if (n <= 2)
-        return s;
-      p[1] = c;
-      p[2] = c;
-      p[n - 2] = c;
-      p[n - 3] = c;
-      if (n <= 6)
-        return s;
-      p[3] = c;
-      p[n - 4] = c;
-      if (n <= 8)
-        return s;
-    //return scalar_memset(s, c, n);
+    if (n == 0)
+      return s;
+    char *p = s;
+    p[0] = c;
+    p[n - 1] = c;
+    if (n <= 2)
+      return s;
+    p[1] = c;
+    p[2] = c;
+    p[n - 2] = c;
+    p[n - 3] = c;
+    if (n <= 6)
+      return s;
+    p[3] = c;
+    p[n - 4] = c;
+    if (n <= 8)
+      return s;
+    // return scalar_memset(s, c, n);
   }
 
   if (n < 8) {
