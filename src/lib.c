@@ -23,8 +23,6 @@ static inline void *small_memset(void *s, int c, size_t n) {
       return s;
     p[1] = c;
     p[2] = c;
-    p[n - 2] = c;
-    p[n - 3] = c;
     return s;
   }
 
