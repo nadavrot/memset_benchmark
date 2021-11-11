@@ -44,6 +44,15 @@ set_target_properties(mem_shim PROPERTIES
      SOVERSION 1
      )
 
+add_library(mem_hist SHARED
+            src/memset_hist.c
+           )
+
+set_target_properties(mem_hist PROPERTIES
+     VERSION ${PROJECT_VERSION}
+     SOVERSION 1
+     )
+
 add_executable(bench_memset
                  src/main.cc
                  src/calls.s
