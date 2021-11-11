@@ -3,7 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-inline void *scalar_memset(void *s, int c, size_t n) {
+static inline void *scalar_memset(void *s, int c, size_t n) {
   char *p = s;
 
   for (int i = 0; i < n; i++) {
@@ -12,7 +12,7 @@ inline void *scalar_memset(void *s, int c, size_t n) {
   return s;
 }
 
-inline void *small_memset(void *s, int c, size_t n) {
+static inline void *small_memset(void *s, int c, size_t n) {
   if (n < 5) {
     if (n == 0)
       return s;
@@ -57,7 +57,7 @@ inline void *small_memset(void *s, int c, size_t n) {
   return s;
 }
 
-void *huge_memset(void *s, int c, size_t n) {
+static inline void *huge_memset(void *s, int c, size_t n) {
   char *p = s;
   char X = c;
   char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
