@@ -2,20 +2,12 @@
 #include <iostream>
 #include <vector>
 
+#include "decl.h"
 #include "timer_utils.h"
 #include "utils.h"
 
 #define MAGIC_VALUE0 'x'
 #define MAGIC_VALUE1 'y'
-
-extern "C" {
-void *memset(void *s, int c, size_t n);
-void *libc_memset(void *s, int c, size_t n);
-void *local_memset(void *s, int c, size_t n);
-void *musl_memset(void *s, int c, size_t n);
-}
-
-using memset_ty = void *(void *s, int c, size_t n);
 
 void print_buffer(const char *start, const char *end, char val,
                   const char *ptr) {

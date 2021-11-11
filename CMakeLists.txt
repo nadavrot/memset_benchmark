@@ -33,6 +33,16 @@ include_directories(BEFORE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
+add_library(mem_shim SHARED
+            src/shims.c
+            src/calls.s
+            src/lib.c
+           )
+
+set_target_properties(mem_shim PROPERTIES
+     VERSION ${PROJECT_VERSION}
+     SOVERSION 1
+     )
 
 add_executable(bench_memset
                  src/main.cc
@@ -51,3 +61,5 @@ target_link_libraries(test_memset PUBLIC)
 
 install(TARGETS bench_memset DESTINATION bin)
 install(TARGETS test_memset DESTINATION bin)
+install(TARGETS mem_shim LIBRARY DESTINATION bin)
+
