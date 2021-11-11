@@ -1,11 +1,11 @@
 
-
 # Value Histogram
 
 This is a histogram of values that were extraced from a large program. Each
 bucket represents the log2 size of the buffer, and each value represents the
 number of hits for the bucket.
 
+```
   [0] = 4
   [1] = 14
   [2] = 8
@@ -25,4 +25,5 @@ number of hits for the bucket.
   [16] = 2
   [17] = 2
   [18] = 0
+  ```
 
