@@ -54,7 +54,7 @@ set_target_properties(mem_hist PROPERTIES
      )
 
 add_executable(bench_memset
-                 src/main.cc
+                 src/test.cc
                  src/calls.s
                  src/lib.c
                  )
