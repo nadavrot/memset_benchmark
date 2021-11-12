@@ -7,6 +7,8 @@ hard to write an implementation that outperforms the default libc
 implementation. The repository contains a few utilities for testing and measuring the
 performance of memset.
 
+The memset implementation is only 100 LOC, and contains no inline assembly.
+
 The implementation of memset in this repository is around 25% faster than the
 glibc implementation.  This is the geometric mean for sizes 0..512. It is also
 faster than the MacOS libc implementation, especially on small sizes. This is a
@@ -28,6 +30,8 @@ formatted sample output from the benchmarking tool.
 |2048| 16| 0| 2356| 2166| 1.08 X|
 |4096| 16| 0| 7879| 4228| 1.86 X|
 |8192| 16| 0|14512| 8360| 1.73 X|
+
+![Benchmark](docs/bench.png)
 
 ## Test tool
 
@@ -52,7 +56,6 @@ implementation to assess the noise level in the system. The benchmarking tool
 uses a trampoline to prevent the compiler from inlining and expanding the
 memset.
 
-![Benchmark](docs/bench.png)
 
 ## Histogram tool
 
@@ -94,7 +97,7 @@ using LD\_PRELOAD (on Linux) or DYLD\_INSERT\_LIBRARIES (on Mac).
 
 ## Known issues
 
-MacOS The benchmarking and testing tools use a trampoline to prevent the
+MacOS: The benchmarking and testing tools use a trampoline to prevent the
 compiler from inlining the call to memset. Apple has different mangling rules
 for their assembly. To solve this problem you need to add underscore to the
 function names in the assembly file (.s file), like this:

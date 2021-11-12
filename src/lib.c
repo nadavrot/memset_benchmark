@@ -117,6 +117,9 @@ void *local_memset(void *s, int c, size_t n) {
   return s;
 }
 
+/// This a memset implementation that was copied from musl. We only use it for
+/// benchmarking.
+
 void *musl_memset(void *dest, int c, size_t n) {
   unsigned char *s = dest;
   size_t k;
