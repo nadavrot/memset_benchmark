@@ -72,7 +72,9 @@ static inline void *huge_memset(void *s, int c, size_t n) {
   p = first_aligned;
 
   // Unroll the body of the loop to increase parallelism.
-  while (p + 128 < buffer_end) {
+  while (p + (32 * 5) < buffer_end) {
+    *((char32 *)p) = val32;
+    p += 32;
     *((char32 *)p) = val32;
     p += 32;
     *((char32 *)p) = val32;
