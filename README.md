@@ -1,11 +1,12 @@
 # memset_benchmark
 
-This repository holds my experiment to accelerate memset and other string
-functions. After reading a blog post by Joe Bialek, I decided to try to optimize
-memset. It turns out that the libc library is not very efficient, and it's not
-hard to write an implementation that outperforms the default libc
-implementation. The repository contains a few utilities for testing and measuring the
-performance of memset.
+** This repository contains a 100 LOC C implementation of memset, that is faster than glibc's implementation. **
+
+After reading a blog post by Joe Bialek, I decided to try to optimize memset. It
+turns out that the libc library is not very efficient, and it's not hard to
+write an implementation that outperforms the default libc implementation. The
+repository contains a few utilities for testing and measuring the performance of
+memset.
 
 The memset implementation is only 100 LOC, and contains no inline assembly.
 
