@@ -7,8 +7,27 @@ hard to write an implementation that outperforms the default libc
 implementation. The repository contains a few utilities for testing and measuring the
 performance of memset.
 
-The implementation of memset in this repository is around 25% faster (geometric
-mean for sizes 0..512) on Linux.
+The implementation of memset in this repository is around 25% faster than the
+glibc implementation.  This is the geometric mean for sizes 0..512. It is also
+faster than the MacOS libc implementation, especially on small sizes. This is a
+formatted sample output from the benchmarking tool.
+
+|size| alignment| offset| libc| local| ratio|
+|----|----------|-------|-----|------|------|
+|1| 16| 0|   388| 290| 1.33 X|
+|2| 16| 0|   419| 290| 1.44 X|
+|4| 16| 0|   420| 258| 1.62 X|
+|8| 16| 0|   388| 258| 1.50 X|
+|16| 16| 0|  387| 322| 1.20 X|
+|32| 16| 0|  322| 322| 1.00 X|
+|64| 16| 0|  322| 290| 1.11 X|
+|128| 16| 0| 387| 355| 1.00 X|
+|256| 16| 0| 548| 484| 1.13 X|
+|512| 16| 0| 678| 556| 1.21 X|
+|1024| 16| 0| 1324| 1129| 1.17 X|
+|2048| 16| 0| 2356| 2166| 1.08 X|
+|4096| 16| 0| 7879| 4228| 1.86 X|
+|8192| 16| 0|14512| 8360| 1.73 X|
 
 ## Test tool
 
