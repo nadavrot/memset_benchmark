@@ -13,13 +13,6 @@
 #define ITER (1000L * 1000L * 100L)
 #define SAMPLES (10)
 
-/// Generate a textual representation of the parameters.
-std::string params_to_entry(const std::string &name, unsigned size,
-                            unsigned alignment, unsigned offset) {
-  return name + ",\t" + std::to_string(size) + ", " +
-         std::to_string(alignment) + ", " + std::to_string(offset) + ", ";
-}
-
 uint64_t measure(memset_ty handle, unsigned samples, unsigned size,
                  unsigned align, unsigned offset, void *ptr) {
   std::vector<uint64_t> tv;
