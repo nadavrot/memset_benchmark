@@ -2,6 +2,13 @@
 #include <stdint.h>
 #include <stdio.h>
 
+////////////////////////////////////////////////////////////////////////////////
+/// This is a small utility that records calls to memset and creates a histogram
+/// of the lengths of calls to memset. It prints the histogram when the program
+/// is terminated. The shared object can be loaded using LD_PRELOAD (on Linux)
+/// or DYLD_INSERT_LIBRARIES (on Mac).
+////////////////////////////////////////////////////////////////////////////////
+
 uint32_t counts[32] = { 0, };
 
 const int tab32[32] = {0,  9,  1,  10, 13, 21, 2,  29, 11, 14, 16,
