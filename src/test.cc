@@ -6,8 +6,8 @@
 #include "timer_utils.h"
 #include "utils.h"
 
-#define MAGIC_VALUE0 'x'
-#define MAGIC_VALUE1 'y'
+#define MAGIC_VALUE0 'X'
+#define MAGIC_VALUE1 'O'
 
 void print_buffer(const char *start, const char *end, char val,
                   const char *ptr) {
@@ -23,7 +23,8 @@ void print_buffer(const char *start, const char *end, char val,
     it++;
   }
   std::cout << "^\n";
-  std::cout << "expected \"" << val << "\" at index " << ptr - start << "\n";
+  std::cout << "Filling a buffer of length " << end - start << ".";
+  std::cout << " Expected \"" << val << "\" at index " << ptr - start << "\n";
 }
 
 void assert_uniform_value(const char *start, const char *end, char val) {
