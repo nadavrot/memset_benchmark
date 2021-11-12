@@ -82,10 +82,10 @@ function names in the assembly file (.s file), like this:
 
 ```
 .text
-.global \_libc\_memset
+.global _libc_memset
 .p2align  4, 0x90
-\_libc\_memset:
-        jmp \_memset
+_libc_memset:
+        jmp _memset
 ```
 
 
