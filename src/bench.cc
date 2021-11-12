@@ -3,12 +3,16 @@
 #include <iomanip>
 #include <iostream>
 #include <vector>
-
 #include <unistd.h>
 
 #include "decl.h"
 #include "timer_utils.h"
 #include "utils.h"
+
+////////////////////////////////////////////////////////////////////////////////
+// This is a small program that compares two memset implementations and records
+// the output in a csv file.
+////////////////////////////////////////////////////////////////////////////////
 
 #define ITER (1000L * 1000L * 100L)
 #define SAMPLES (10)
@@ -46,13 +50,6 @@ int main(int argc, char **argv) {
 
   for (int i = 0; i < 512; i++) {
     bench_impl(libc_memset, local_memset, i, 16, 0);
-    std::cout << "\n";
-  }
-
-  for (int sz2 = 0; sz2 < 10; sz2++) {
-    bench_impl(libc_memset, local_memset, (8 << sz2), 16, 0);
-    std::cout << "\n";
-    bench_impl(libc_memset, local_memset, (8 << sz2) + 15, 16, 0);
     std::cout << "\n";
   }
 

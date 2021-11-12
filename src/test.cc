@@ -6,6 +6,11 @@
 #include "timer_utils.h"
 #include "utils.h"
 
+////////////////////////////////////////////////////////////////////////////////
+// This is a small program that checks if some memset implementation is correct.
+// The tool currently checks libc, musl and the local implementation.
+////////////////////////////////////////////////////////////////////////////////
+
 #define MAGIC_VALUE0 'X'
 #define MAGIC_VALUE1 'O'
 
