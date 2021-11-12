@@ -83,11 +83,13 @@ static inline void *huge_memset(void *s, int c, size_t n) {
     p += 32;
   }
 
+  // Up to 3 iterations.
   while (p + 32 < buffer_end) {
     *((char32 *)p) = val32;
     p += 32;
   }
 
+  // Stamp the last unaligned word.
   *((char32 *)last_word) = val32;
   return s;
 }
@@ -100,7 +102,7 @@ void *local_memset(void *s, int c, size_t n) {
     return small_memset(s, c, n);
   }
 
-  if (n > 128) {
+  if (n > 180) {
     return huge_memset(s, c, n);
   }
 
@@ -110,7 +112,6 @@ void *local_memset(void *s, int c, size_t n) {
 
   // Stamp the last 32 bytes of the buffer.
   char *last = s + n - 32;
-  *((char32 *)last) = val32;
 
   // Stamp the first section of the buffer.
   while (n >= 32) {
@@ -119,6 +120,7 @@ void *local_memset(void *s, int c, size_t n) {
     n -= 32;
   }
 
+  *((char32 *)last) = val32;
   return s;
 }
 
