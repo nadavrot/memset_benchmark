@@ -38,9 +38,9 @@ void assert_uniform_value(const char *start, const char *end, char val) {
 }
 
 void test_impl(memset_ty handle, const std::string &name, unsigned chunk_size) {
-  std::vector<char> memory(chunk_size + 256, MAGIC_VALUE0);
+  std::vector<char> memory(chunk_size + 512, MAGIC_VALUE0);
   // Start mem-setting the array at different offsets.
-  for (int offset = 0; offset < 64; offset++) {
+  for (int offset = 0; offset < 128; offset++) {
     const char *buffer_start = &*memory.begin();
     const char *buffer_end = &*memory.end();
 
