@@ -3,15 +3,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-static inline void *scalar_memset(void *s, int c, size_t n) {
-  char *p = s;
-
-  for (int i = 0; i < n; i++) {
-    p[i] = c;
-  }
-  return s;
-}
-
 static inline void *small_memset(void *s, int c, size_t n) {
   if (n < 5) {
     if (n == 0)
