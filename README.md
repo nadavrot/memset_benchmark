@@ -1,14 +1,11 @@
 # memset_benchmark
 
-** This repository contains a 100 LOC C implementation of memset, that is faster than glibc's implementation. **
+This repository contains a 100 LOC C implementation of memset, that is faster than glibc's implementation.
 
-After reading a blog post by Joe Bialek, I decided to try to optimize memset. It
+After reading a blog [post](https://msrc-blog.microsoft.com/2021/01/11/building-faster-amd64-memset-routines/)
+by Joe Bialek, I decided to try to optimize memset. It
 turns out that the libc library is not very efficient, and it's not hard to
-write an implementation that outperforms the default libc implementation. The
-repository contains a few utilities for testing and measuring the performance of
-memset.
-
-The memset implementation is only 100 LOC, and contains no inline assembly.
+write an implementation that outperforms the default libc implementation.
 
 The implementation of memset in this repository is around 25% faster than the
 glibc implementation.  This is the geometric mean for sizes 0..512. It is also
@@ -34,11 +31,14 @@ formatted sample output from the benchmarking tool.
 
 ![Benchmark](docs/bench.png)
 
+The repository contains a few utilities for testing and measuring the performance of
+memset.
+
 ## Test tool
 
-First, it contains a small test harness that verifies the
-correctness of memset. It's really easy to make mistakes with off-by-one errors
-and run into alignment issues. The exhaustive tester catches these issues.
+This is a small test harness that verifies the correctness of memset. It's
+really easy to make mistakes with off-by-one errors and run into alignment
+issues. The exhaustive tester catches these issues.
 
 This is a sample output:
 ```
