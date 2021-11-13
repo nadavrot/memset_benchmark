@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+// Handle memsets of sizes 0..32
 static inline void *small_memset(void *s, int c, size_t n) {
   if (n < 5) {
     if (n == 0)
@@ -17,16 +18,18 @@ static inline void *small_memset(void *s, int c, size_t n) {
     return s;
   }
 
+  uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
+
   if (n <= 16) {
     if (n <= 8) {
-      uint32_t val4 = ((uint64_t)0x01010101L * ((uint8_t)c));
+      uint32_t val4 = val8;
       char *first = s;
       char *last = s + n - 4;
       *((u32 *)first) = val4;
       *((u32 *)last) = val4;
       return s;
     }
-    uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
+
     char *first = s;
     char *last = s + n - 8;
     *((u64 *)first) = val8;
@@ -34,15 +37,12 @@ static inline void *small_memset(void *s, int c, size_t n) {
     return s;
   }
 
-  uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
-  char *first = s;
-  char *second = s + n / 2 - 8;
-  char *third = s + n / 2;
-  char *fourth = s + n - 8;
-  *((u64 *)first) = val8;
-  *((u64 *)second) = val8;
-  *((u64 *)third) = val8;
-  *((u64 *)fourth) = val8;
+  char X = c;
+  char *p = s;
+  char16 val16 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
+  char *last = s + n - 16;
+  *((char16 *)last) = val16;
+  *((char16 *)p) = val16;
   return s;
 }
 
@@ -107,10 +107,9 @@ void *local_memset(void *s, int c, size_t n) {
   char *last = s + n - 32;
 
   // Stamp the first section of the buffer.
-  while (n >= 32) {
+  while (p < last) {
     *((char32 *)p) = val32;
     p += 32;
-    n -= 32;
   }
 
   *((char32 *)last) = val32;
