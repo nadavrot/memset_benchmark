@@ -1,16 +1,20 @@
 # memset_benchmark
 
-This repository contains a 100 LOC C implementation of memset, that is faster than glibc's implementation.
+This repository contains a fast 100 LOC C implementation of memset for x86.
 
 After reading a blog [post](https://msrc-blog.microsoft.com/2021/01/11/building-faster-amd64-memset-routines/)
 by Joe Bialek, I decided to try to optimize memset. It
 turns out that the libc library is not very efficient, and it's not hard to
 write an implementation that outperforms the default libc implementation.
 
-The implementation of memset in this repository is around 25% faster than the
-glibc implementation.  This is the geometric mean for sizes 0..512. It is also
-faster than the MacOS libc implementation, especially on small sizes. This is a
-formatted sample output from the benchmarking tool.
+The implementation of memset in this repository is faster than the glibc
+implementation for most sizes. The chart below compares this code with the musl
+implementation and two libc configurations. The first configuration is a regular
+function call, and the second configuration is a direct call to libc's memset
+that bypasses the elf indirection, as suggested by Dave Zarzycki.
+
+![Benchmark](docs/bench.png)
+
 
 The repository contains a few utilities for testing and measuring the performance of
 memset.
