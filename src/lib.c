@@ -100,7 +100,7 @@ void *local_memset(void *s, int c, size_t n) {
     return small_memset(s, c, n);
   }
 
-  if (n > 200) {
+  if (n > 160) {
     return huge_memset(s, c, n);
   }
 
