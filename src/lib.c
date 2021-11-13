@@ -22,15 +22,15 @@ static inline void *small_memset(void *s, int c, size_t n) {
       uint32_t val4 = ((uint64_t)0x01010101L * ((uint8_t)c));
       char *first = s;
       char *last = s + n - 4;
-      *((uint32_t *)first) = val4;
-      *((uint32_t *)last) = val4;
+      *((u32 *)first) = val4;
+      *((u32 *)last) = val4;
       return s;
     }
     uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
     char *first = s;
     char *last = s + n - 8;
-    *((uint64_t *)first) = val8;
-    *((uint64_t *)last) = val8;
+    *((u64 *)first) = val8;
+    *((u64 *)last) = val8;
     return s;
   }
 
@@ -39,10 +39,10 @@ static inline void *small_memset(void *s, int c, size_t n) {
   char *second = s + n / 2 - 8;
   char *third = s + n / 2;
   char *fourth = s + n - 8;
-  *((uint64_t *)first) = val8;
-  *((uint64_t *)second) = val8;
-  *((uint64_t *)third) = val8;
-  *((uint64_t *)fourth) = val8;
+  *((u64 *)first) = val8;
+  *((u64 *)second) = val8;
+  *((u64 *)third) = val8;
+  *((u64 *)fourth) = val8;
   return s;
 }
 
