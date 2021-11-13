@@ -18,22 +18,21 @@ static inline void *small_memset(void *s, int c, size_t n) {
     return s;
   }
 
-  uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
-
   if (n <= 16) {
-    if (n <= 8) {
-      uint32_t val4 = val8;
+    uint64_t val8 = ((uint64_t)0x0101010101010101L * ((uint8_t)c));
+    if (n >= 8) {
       char *first = s;
-      char *last = s + n - 4;
-      *((u32 *)first) = val4;
-      *((u32 *)last) = val4;
+      char *last = s + n - 8;
+      *((u64 *)first) = val8;
+      *((u64 *)last) = val8;
       return s;
     }
 
+    uint32_t val4 = val8;
     char *first = s;
-    char *last = s + n - 8;
-    *((u64 *)first) = val8;
-    *((u64 *)last) = val8;
+    char *last = s + n - 4;
+    *((u32 *)first) = val4;
+    *((u32 *)last) = val4;
     return s;
   }
 
@@ -64,24 +63,24 @@ static inline void *huge_memset(void *s, int c, size_t n) {
 
   // Unroll the body of the loop to increase parallelism.
   while (p + (32 * 5) < buffer_end) {
-    *((char32 *)p) = val32;
+    *((char32a *)p) = val32;
     p += 32;
-    *((char32 *)p) = val32;
+    *((char32a *)p) = val32;
     p += 32;
-    *((char32 *)p) = val32;
+    *((char32a *)p) = val32;
     p += 32;
-    *((char32 *)p) = val32;
+    *((char32a *)p) = val32;
     p += 32;
-    *((char32 *)p) = val32;
+    *((char32a *)p) = val32;
     p += 32;
   }
 
-  // Complete the last few iterations:
-  #define TRY_STAMP_32_BYTES \
-  if (p < last_word) { \
-    *((char32 *)p) = val32; \
-    p += 32; \
-  } \
+// Complete the last few iterations:
+#define TRY_STAMP_32_BYTES                                                     \
+  if (p < last_word) {                                                         \
+    *((char32a *)p) = val32;                                                   \
+    p += 32;                                                                   \
+  }
 
   TRY_STAMP_32_BYTES
   TRY_STAMP_32_BYTES
@@ -97,7 +96,7 @@ void *local_memset(void *s, int c, size_t n) {
   char *p = s;
   char X = c;
 
-  if (n <= 32) {
+  if (n < 32) {
     return small_memset(s, c, n);
   }
 
@@ -105,20 +104,19 @@ void *local_memset(void *s, int c, size_t n) {
     return huge_memset(s, c, n);
   }
 
-  // n >= 32!
   char32 val32 = {X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X,
                   X, X, X, X, X, X, X, X, X, X, X, X, X, X, X, X};
 
-  // Stamp the last 32 bytes of the buffer.
-  char *last = s + n - 32;
+  char *last_word = s + n - 32;
 
-  // Stamp the first section of the buffer.
-  while (p < last) {
+  // Stamp the 32-byte chunks.
+  while (p < last_word) {
     *((char32 *)p) = val32;
     p += 32;
   }
 
-  *((char32 *)last) = val32;
+  // Stamp the last unaligned 32 bytes of the buffer.
+  *((char32 *)last_word) = val32;
   return s;
 }
 
