@@ -53,6 +53,9 @@ set_target_properties(mem_hist PROPERTIES
      SOVERSION 1
      )
 
+
+target_compile_options(mem_hist PRIVATE "-fno-builtin")
+
 add_executable(bench_memset
                  src/bench.cc
                  src/calls.s
