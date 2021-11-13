@@ -76,11 +76,17 @@ static inline void *huge_memset(void *s, int c, size_t n) {
     p += 32;
   }
 
-  // Up to 3 iterations.
-  while (p + 32 < buffer_end) {
-    *((char32 *)p) = val32;
-    p += 32;
-  }
+  // Complete the last few iterations:
+  #define TRY_STAMP_32_BYTES \
+  if (p < last_word) { \
+    *((char32 *)p) = val32; \
+    p += 32; \
+  } \
+
+  TRY_STAMP_32_BYTES
+  TRY_STAMP_32_BYTES
+  TRY_STAMP_32_BYTES
+  TRY_STAMP_32_BYTES
 
   // Stamp the last unaligned word.
   *((char32 *)last_word) = val32;
