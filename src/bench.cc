@@ -39,18 +39,17 @@ void bench_impl(memset_ty handle0, memset_ty handle1, unsigned size,
 
   std::vector<char> memory(size + 256, 0);
   void *ptr = align_pointer(&memory[0], align, offset);
-  uint64_t t0 = measure(handle0, SAMPLES, size, align, offset, ptr);
-  uint64_t t1 = measure(handle1, SAMPLES, size, align, offset, ptr);
-
-  std::cout << t0 << ", " << t1 << ", " << (double(t0) / (t1)) << ",";
+  u_int64_t t0 = measure(handle0, SAMPLES, size, align, offset, ptr);
+  u_int64_t t1 = measure(handle1, SAMPLES, size, align, offset, ptr);
+  std::cout << t0 << ", " << t1 << ", " << (double)t0 / t1 << "," << std::endl;
 }
 
 int main(int argc, char **argv) {
+  std::cout << std::setprecision(3);
   std::cout << std::fixed << "size, alignment, offset, libc, local\n";
 
   for (int i = 0; i < 512; i++) {
     bench_impl(libc_memset, local_memset, i, 16, 0);
-    std::cout << "\n";
   }
 
   return 0;
