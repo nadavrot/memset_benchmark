@@ -1,0 +1,76 @@
+               <+0>:   endbr64 
+               <+4>:   vmovd  %esi, %xmm0
+               <+8>:   movq   %rdi, %rax
+               <+11>:  vpbroadcastb %xmm0, %ymm0
+               <+16>:  cmpq   $0x20, %rdx
+               <+20>:  jb     0xBELOW_32____            ; <+190>
+               <+26>:  cmpq   $0x40, %rdx
+               <+30>:  ja     0xABOVE_64____            ; <+46>
+               <+32>:  vmovdqu %ymm0, -0x20(%rdi,%rdx)
+               <+38>:  vmovdqu %ymm0, (%rdi)
+               <+42>:  vzeroupper 
+               <+45>:  retq   
+0xABOVE_64____ <+46>:  cmpq   $0x800, %rdx              ; imm = 0x800 
+               <+53>:  ja     0xABOVE_2048__            ; ___lldb_unnamed_symbol1097$$libc.so.6 + 4
+               <+55>:  cmpq   $0x80, %rdx
+               <+62>:  ja     0xABOVE_128___            ; <+89>
+0xSZ_64_TO_128 <+64>:  vmovdqu %ymm0, (%rdi)
+               <+68>:  vmovdqu %ymm0, 0x20(%rdi)
+               <+73>:  vmovdqu %ymm0, -0x20(%rdi,%rdx)
+               <+79>:  vmovdqu %ymm0, -0x40(%rdi,%rdx)
+0xEXIT_EXIT___ <+85>:  vzeroupper 
+               <+88>:  retq   
+0xABOVE_128___ <+89>:  leaq   0x80(%rdi), %rcx
+               <+96>:  vmovdqu %ymm0, (%rdi)
+               <+100>: andq   $-0x80, %rcx
+               <+104>: vmovdqu %ymm0, -0x20(%rdi,%rdx)
+               <+110>: vmovdqu %ymm0, 0x20(%rdi)
+               <+115>: vmovdqu %ymm0, -0x40(%rdi,%rdx)
+               <+121>: vmovdqu %ymm0, 0x40(%rdi)
+               <+126>: vmovdqu %ymm0, -0x60(%rdi,%rdx)
+               <+132>: vmovdqu %ymm0, 0x60(%rdi)
+               <+137>: vmovdqu %ymm0, -0x80(%rdi,%rdx)
+               <+143>: addq   %rdi, %rdx
+               <+146>: andq   $-0x80, %rdx
+               <+150>: cmpq   %rdx, %rcx
+               <+153>: je     0xEXIT_EXIT___            ; <+85>
+0xLOOP_4x32B__ <+155>: vmovdqa %ymm0, (%rcx)
+               <+159>: vmovdqa %ymm0, 0x20(%rcx)
+               <+164>: vmovdqa %ymm0, 0x40(%rcx)
+               <+169>: vmovdqa %ymm0, 0x60(%rcx)
+               <+174>: addq   $0x80, %rcx
+               <+181>: cmpq   %rcx, %rdx
+               <+184>: jne    0xLOOP_4x32B__            ; <+155>
+               <+186>: vzeroupper 
+               <+189>: retq   
+0xBELOW_32____ <+190>: cmpb   $0x10, %dl
+               <+193>: jae    0xBELOW_16____            ; <+223>
+               <+195>: vmovq  %xmm0, %rcx
+               <+200>: cmpb   $0x8, %dl
+               <+203>: jae    0xABOVE_8_____            ; <+237>
+               <+205>: cmpb   $0x4, %dl
+               <+208>: jae    0xABOVE_4_____            ; <+249>
+               <+210>: cmpb   $0x1, %dl
+               <+213>: ja     0xABOVE_1_____            ; <+259>
+               <+215>: jb     0xIS_ZERO_CASE            ; <+219>
+               <+217>: movb   %cl, (%rdi)
+0xIS_ZERO_CASE <+219>: vzeroupper 
+               <+222>: retq   
+0xBELOW_16____ <+223>: vmovdqu %xmm0, -0x10(%rdi,%rdx)
+               <+229>: vmovdqu %xmm0, (%rdi)
+               <+233>: vzeroupper 
+               <+236>: retq   
+0xABOVE_8_____ <+237>: movq   %rcx, -0x8(%rdi,%rdx)
+               <+242>: movq   %rcx, (%rdi)
+               <+245>: vzeroupper 
+               <+248>: retq   
+0xABOVE_4____ <+249>: movl   %ecx, -0x4(%rdi,%rdx)
+               <+253>: movl   %ecx, (%rdi)
+               <+255>: vzeroupper 
+               <+258>: retq   
+0xABOVE_1_____ <+259>: movw   %cx, -0x2(%rdi,%rdx)
+               <+264>: movw   %cx, (%rdi)
+               <+267>: vzeroupper 
+               <+270>: retq   
+               <+271>: nop    
+
