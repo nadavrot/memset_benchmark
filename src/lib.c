@@ -110,10 +110,10 @@ void *local_memset(void *s, int c, size_t n) {
   char *last_word = s + n - 32;
 
   // Stamp the 32-byte chunks.
-  while (p < last_word) {
+  do {
     *((char32 *)p) = val32;
     p += 32;
-  }
+  } while (p < last_word);
 
   // Stamp the last unaligned 32 bytes of the buffer.
   *((char32 *)last_word) = val32;
