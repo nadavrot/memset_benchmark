@@ -35,7 +35,7 @@ include_directories(BEFORE
 
 add_library(mem_shim SHARED
             src/shims.c
-            src/calls.s
+            src/calls.S
             src/lib.c
            )
 
@@ -58,13 +58,13 @@ target_compile_options(mem_hist PRIVATE "-fno-builtin")
 
 add_executable(bench_memset
                  src/bench.cc
-                 src/calls.s
+                 src/calls.S
                  src/lib.c
                  )
 
 add_executable(test_memset
                  src/test.cc
-                 src/calls.s
+                 src/calls.S
                  src/lib.c
                  )
 

@@ -81,19 +81,3 @@ This is a small utility that swaps the builtin call to memset with the local
 implementation of memset from this project. .  The shared object can be loaded
 using LD\_PRELOAD (on Linux) or DYLD\_INSERT\_LIBRARIES (on Mac).
 
-## Known issues
-
-MacOS: The benchmarking and testing tools use a trampoline to prevent the
-compiler from inlining the call to memset. Apple has different mangling rules
-for their assembly. To solve this problem you need to add underscore to the
-function names in the assembly file (.s file), like this:
-
-```
-.text
-.global _libc_memset
-.p2align  4, 0x90
-_libc_memset:
-        jmp _memset
-```
-
-
