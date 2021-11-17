@@ -37,6 +37,7 @@ void assert_uniform_value(const char *start, const char *end, char val) {
   while (ptr != end) {
     if (val != *ptr) {
       print_buffer(start, end, val, ptr);
+      fflush(stdout);
       abort();
     }
     ptr++;
@@ -79,6 +80,7 @@ int main(int argc, char **argv) {
     TEST(libc_memset, i);
     TEST(local_memset, i);
     TEST(musl_memset, i);
+    TEST(asm_memset, i);
   }
   std::cout << "Done.\n";
 

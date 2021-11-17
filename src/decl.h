@@ -13,6 +13,7 @@ extern "C" {
 void *memset(void *s, int c, size_t n);
 void *libc_memset(void *s, int c, size_t n);
 void *local_memset(void *s, int c, size_t n);
+void *asm_memset(void *s, int c, size_t n);
 void *musl_memset(void *s, int c, size_t n);
 
 #ifdef __cplusplus
