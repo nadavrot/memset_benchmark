@@ -37,7 +37,11 @@ asm_memset:
         jae LABEL(above_64)
 LABEL(below_64):
         cmp    $0x20, %rdx
-        jae LABEL(in_32_to_64)
+        jb LABEL(below_32)
+        vmovdqu %ymm0,(%rdi)
+        vmovdqu %ymm0,-0x20(%rdi,%rdx)
+        vzeroupper
+        retq
 LABEL(below_32):
         cmp    $0x10, %rdx
         jae     LABEL(in_16_to_32)
@@ -78,12 +82,6 @@ LABEL(in_4_to_8):
 LABEL(in_16_to_32):
         vmovups %xmm0,(%rdi)
         vmovups %xmm0,-0x10(%rdi,%rdx)
-        vzeroupper
-        retq
-LABEL(in_32_to_64):
-        // last_word -> rsi
-        vmovdqu %ymm0,(%rdi)
-        vmovdqu %ymm0,-0x20(%rdi,%rdx)
         vzeroupper
         retq
 LABEL(above_64):
