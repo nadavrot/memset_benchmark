@@ -3,7 +3,7 @@
 .global _libc_memset
 .p2align  4, 0x90
 _libc_memset:
-        _jmp memset
+        jmp _memset
 
 #else
 
@@ -14,16 +14,22 @@ libc_memset:
         jmp memset
 #endif
 
-
 #define LABEL(x)     .L##x
-
+#if defined(__APPLE__)
+.text
+.global _asm_memset
+.p2align  16, 0x90
+_asm_memset:
+#else
 .text
 .global asm_memset
 .p2align  16, 0x90
+asm_memset:
+#endif
+
 // RDI is the buffer
 // RSI is the value
 // RDX is length
-asm_memset:
         vmovd  %esi, %xmm0
         vpbroadcastb %xmm0,%ymm0
         mov    %rdi,%rax
