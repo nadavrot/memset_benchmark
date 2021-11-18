@@ -2,8 +2,8 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
-#include <vector>
 #include <unistd.h>
+#include <vector>
 
 #include "decl.h"
 #include "timer_utils.h"
@@ -14,8 +14,8 @@
 // the output in a csv file.
 ////////////////////////////////////////////////////////////////////////////////
 
-#define ITER (1000L * 1000L * 100L)
-#define SAMPLES (10)
+#define ITER (1000L * 1000L * 10L)
+#define SAMPLES (30)
 
 uint64_t measure(memset_ty handle, unsigned samples, unsigned size,
                  unsigned align, unsigned offset, void *ptr) {
@@ -33,23 +33,29 @@ uint64_t measure(memset_ty handle, unsigned samples, unsigned size,
 }
 
 // Allocate memory and benchmark a single implementation.
-void bench_impl(memset_ty handle0, memset_ty handle1, unsigned size,
+void bench_impl(const std::vector<memset_ty *> &toTest, unsigned size,
                 unsigned align, unsigned offset) {
-  std::cout << size << ", " << align << ", " << offset << ", ";
-
   std::vector<char> memory(size + 256, 0);
   void *ptr = align_pointer(&memory[0], align, offset);
-  u_int64_t t0 = measure(handle0, SAMPLES, size, align, offset, ptr);
-  u_int64_t t1 = measure(handle1, SAMPLES, size, align, offset, ptr);
-  std::cout << t0 << ", " << t1 << ", " << (double)t0 / t1 << "," << std::endl;
+
+  std::cout << size << ", ";
+  for (auto handle : toTest) {
+    u_int64_t res = measure(handle, SAMPLES, size, align, offset, ptr);
+    std::cout << res << ", ";
+  }
+  std::cout << std::endl;
 }
 
 int main(int argc, char **argv) {
   std::cout << std::setprecision(3);
-  std::cout << std::fixed << "size, alignment, offset, libc, local\n";
+  std::cout << std::fixed
+            << "size, musl, libc@plt, libc-direct, c_memset, asm_memset\n";
+
+  std::vector<memset_ty *> toTest = {musl_memset, libc_memset, &memset,
+                                     local_memset, asm_memset};
 
   for (int i = 0; i < 512; i++) {
-    bench_impl(libc_memset, local_memset, i, 16, 0);
+    bench_impl(toTest, i, 16, 0);
   }
 
   return 0;
