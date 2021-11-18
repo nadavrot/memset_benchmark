@@ -85,8 +85,8 @@ LABEL(in_16_to_32):
         vzeroupper
         retq
 LABEL(above_64):
-        cmp    $0xa0, %rdx
-        jae LABEL(above_160)
+        cmp    $0xb0, %rdx
+        ja LABEL(above_192)
         cmp    $0x80, %rdx
         jbe LABEL(in_64_to_128)
         // Do some work filling unaligned 32bit words.
@@ -118,27 +118,28 @@ LABEL(in_64_to_128):
         vzeroupper
         retq
 
-LABEL(above_160):
+LABEL(above_192):
 // rdi is the buffer address
 // rsi is the value
 // rdx is length
-        // Store the first 32 bytes.
+        // Store the first unaligned 32 bytes.
         vmovdqu %ymm0,(%rdi)
 
-        // First aligned pointer in rsi
+        // The first aligned word is stored in %rsi.
         mov    %rdi,%rsi
         and    $0xffffffffffffffe0,%rsi
         lea    0x20(%rsi),%rsi
 
-        // Compute the address of the last word into rdi.
+        // Compute the address of the last unaligned word into rdi.
         lea    -0x20(%rdx), %rdx
         add     %rdx, %rdi
 
+        // Check if we can do a full 5x32B stamp.
         lea    0xa0(%rsi),%rcx
         cmp    %rcx, %rdi
-        jb     LABEL(fill_160_tail)
+        jb     LABEL(fill_192_tail)
 .align 8
-LABEL(fill_160):
+LABEL(fill_192):
         vmovdqa %ymm0,(%rsi)
         vmovdqa %ymm0,0x20(%rsi)
         vmovdqa %ymm0,0x40(%rsi)
@@ -147,35 +148,43 @@ LABEL(fill_160):
         add     $0xa0, %rsi
         lea    0xa0(%rsi),%rcx
         cmp    %rcx, %rdi
-        ja     LABEL(fill_160)
+        ja     LABEL(fill_192)
 
-LABEL(fill_160_tail):
+LABEL(fill_192_tail):
         cmp    %rsi, %rdi
-        jb     LABEL(fill_160_done)
+        jb     LABEL(fill_192_done)
         vmovdqa %ymm0, (%rsi)
 
         lea    0x20(%rsi),%rcx
         cmp    %rcx, %rdi
-        jb     LABEL(fill_160_done)
+        jb     LABEL(fill_192_done)
         vmovdqa %ymm0, 0x20(%rsi)
 
         lea    0x40(%rsi),%rcx
         cmp    %rcx, %rdi
-        jb     LABEL(fill_160_done)
+        jb     LABEL(fill_192_done)
         vmovdqa %ymm0, 0x40(%rsi)
 
         lea    0x60(%rsi),%rcx
         cmp    %rcx, %rdi
-        jb     LABEL(fill_160_done)
+        jb     LABEL(fill_192_done)
         vmovdqa %ymm0, 0x60(%rsi)
 
         lea    0x80(%rsi),%rcx
         cmp    %rcx, %rdi
-        jb     LABEL(fill_160_done)
+        jb     LABEL(fill_192_done)
         vmovdqa %ymm0, 0x80(%rsi)
 
-LABEL(fill_160_done):
+LABEL(fill_192_done):
         // Stamp the last word.
         vmovdqu %ymm0,(%rdi)
         vzeroupper
         ret
+
+LABEL(stamp_4):
+        vmovdqa %ymm0,(%rsi)
+        vmovdqa %ymm0,0x20(%rsi)
+        vmovdqa %ymm0,0x40(%rsi)
+        vmovdqa %ymm0,0x60(%rsi)
+        add     $0x80, %rsi
+        jmp     LABEL(fill_192_done)
