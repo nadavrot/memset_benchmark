@@ -28,7 +28,7 @@ void __attribute__((destructor)) print_hitogram() {
   printf("Memset histogram:\n");
   int i;
   for (i = 0; i < 30; i++) {
-    fprintf(stderr, "[%d] = %d\n", i, counts[i]);
+    fprintf(stderr, "%d, %d\n", i, counts[i]);
   }
 }
 
