@@ -137,7 +137,7 @@ LABEL(above_192):
         // Check if we can do a full 5x32B stamp.
         lea    0xa0(%rsi),%rcx
         cmp    %rcx, %rdi
-        jb     LABEL(fill_192_tail)
+        jb     LABEL(stamp_4)
 .align 8
 LABEL(fill_192):
         vmovdqa %ymm0,(%rsi)
@@ -170,21 +170,19 @@ LABEL(fill_192_tail):
         jb     LABEL(fill_192_done)
         vmovdqa %ymm0, 0x60(%rsi)
 
+LABEL(last_wide_store):
         lea    0x80(%rsi),%rcx
         cmp    %rcx, %rdi
         jb     LABEL(fill_192_done)
         vmovdqa %ymm0, 0x80(%rsi)
-
 LABEL(fill_192_done):
         // Stamp the last word.
         vmovdqu %ymm0,(%rdi)
         vzeroupper
         ret
-
 LABEL(stamp_4):
         vmovdqa %ymm0,(%rsi)
         vmovdqa %ymm0,0x20(%rsi)
         vmovdqa %ymm0,0x40(%rsi)
         vmovdqa %ymm0,0x60(%rsi)
-        add     $0x80, %rsi
-        jmp     LABEL(fill_192_done)
+        jmp     LABEL(last_wide_store)
