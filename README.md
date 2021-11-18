@@ -1,23 +1,25 @@
 # memset_benchmark
 
-This repository contains a fast 100 LOC C implementation of memset for x86.
+This repository contains two fast memset implementations for x86. They both
+outperform the glibc implementation, even when excluding the elf indirection.
+The first implementation is 100 lines of C code, and the other implementation is
+a short assembly function.
 
 After reading a blog [post](https://msrc-blog.microsoft.com/2021/01/11/building-faster-amd64-memset-routines/)
-by Joe Bialek, I decided to try to optimize memset. It
-turns out that the libc library is not very efficient, and it's not hard to
-write an implementation that outperforms the default libc implementation.
+by Joe Bialek, I decided to try to optimize memset. It turns out that the glibc
+implementation is good, but it could be improved.
 
 The implementation of memset in this repository is faster than the glibc
 implementation for most sizes. The chart below compares this code with the musl
-implementation and two libc configurations. The first configuration is a regular
-function call, and the second configuration is a direct call to libc's memset
-that bypasses the elf indirection, as suggested by Dave Zarzycki.
+implementation and two libc configurations (with and without elf indirection, as
+suggested by Dave Zarzycki). The benchmark also shows the two memset
+implementations from this project.
 
 ![Benchmark](docs/bench.png)
 
 
-The repository contains a few utilities for testing and measuring the performance of
-memset.
+The repository also contains a few utilities for testing and measuring the
+performance of memset.
 
 ## Test tool
 
