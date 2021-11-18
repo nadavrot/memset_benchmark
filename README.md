@@ -17,6 +17,12 @@ implementations from this project.
 
 ![Benchmark](docs/bench.png)
 
+The size of the buffer that memset mutates is typically small. The picture below
+presents the buffer length distribution as recorded in the google-chrome
+program. Vim, Python, and even server workloads have a similar distribution.
+ 
+![Histogram](docs/hist.png)
+
 
 The repository also contains a few utilities for testing and measuring the
 performance of memset.
