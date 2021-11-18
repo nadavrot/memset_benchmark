@@ -19,7 +19,9 @@ implementations from this project.
 
 The size of the buffer that memset mutates is typically small. The picture below
 presents the buffer length distribution as recorded in the google-chrome
-program. Vim, Python, and even server workloads have a similar distribution.
+program. Vim, Python, and even server workloads have a similar distribution. The
+values in the chart represent the power of two buffer size (10 represents the
+values 512 to 1024).
  
 ![Histogram](docs/hist.png)
 
