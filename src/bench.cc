@@ -6,8 +6,6 @@
 #include <vector>
 
 #include "decl.h"
-#include "rand.h"
-#include "timer_utils.h"
 #include "utils.h"
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,6 +15,8 @@
 
 #define ITER (1000L * 1000L * 10L)
 #define SAMPLES (20)
+
+DoomRNG RNG;
 
 /// Measure a single implementation \p handle.
 uint64_t measure(memset_ty handle, unsigned size, unsigned align,
@@ -56,10 +56,10 @@ void bench_rand_range(const std::vector<memset_ty *> &toTest) {
     Stopwatch T;
 
     for (unsigned i = 0; i < SAMPLES; i++) {
-      rand_reset();
+      RNG.rand_reset();
       T.start();
       for (size_t j = 0; j < ITER; j++) {
-        (handle)((char *)ptr + next_u8_random(), 0, next_u8_random());
+        (handle)((char *)ptr + RNG.next_u8_random(), 0, RNG.next_u8_random());
       }
       T.stop();
     }
