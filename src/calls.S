@@ -58,6 +58,7 @@ LABEL(in_4_to_16):
         mov    %rsi,(%rdi)
         vzeroupper
         retq
+.align 4
 LABEL(below_4):
         test   %rdx, %rdx
         je     LABEL(exit)
