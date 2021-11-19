@@ -54,7 +54,7 @@ void bench_rand_range(const std::vector<memset_ty *> &toTest) {
 
   for (auto handle : toTest) {
     Stopwatch T;
-
+    sleep(1);
     for (unsigned i = 0; i < SAMPLES; i++) {
       RNG.rand_reset();
       T.start();

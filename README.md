@@ -15,6 +15,16 @@ project.
 
 ![Benchmark](docs/bench.png)
 
+The chart below compares the performance of different memset implementations on
+buffers of varying sizes and offsets. Unlike the hot loop that hammers a single
+value, this benchmark is more realistic and takes into account mispredicted
+branches and the performance of the cpu decoder. The buffers are in the size
+range 0 to 256. The random function is made of pre-computed random values, to
+lower the overhead of the random function.  This was suggested by Yann Collet
+(@Cyan4973).
+
+![Benchmark](docs/rand.png)
+
 The size of the buffer that memset mutates is typically small. The picture below
 presents the buffer length distribution as recorded in the google-chrome
 program. Vim, Python, and even server workloads have a similar distribution. The
