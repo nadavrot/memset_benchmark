@@ -33,45 +33,4 @@ include_directories(BEFORE
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   )
 
-add_library(mem_shim SHARED
-            src/memset/shims.c
-            src/memset/impl.S
-            src/memset/impl.c
-           )
-
-set_target_properties(mem_shim PROPERTIES
-     VERSION ${PROJECT_VERSION}
-     SOVERSION 1
-     )
-
-add_library(mem_hist SHARED
-            src/memset/memset_hist.c
-           )
-
-set_target_properties(mem_hist PROPERTIES
-     VERSION ${PROJECT_VERSION}
-     SOVERSION 1
-     )
-
-
-target_compile_options(mem_hist PRIVATE "-fno-builtin")
-
-add_executable(bench_memset
-                 src/memset/bench_memset.cc
-                 src/memset/impl.S
-                 src/memset/impl.c
-                 )
-
-add_executable(test_memset
-                 src/memset/test_memset.cc
-                 src/memset/impl.S
-                 src/memset/impl.c
-                 )
-
-target_link_libraries(bench_memset PUBLIC)
-target_link_libraries(test_memset PUBLIC)
-
-install(TARGETS bench_memset DESTINATION bin)
-install(TARGETS test_memset DESTINATION bin)
-install(TARGETS mem_shim LIBRARY DESTINATION bin)
-
+add_subdirectory(src/memset/)
