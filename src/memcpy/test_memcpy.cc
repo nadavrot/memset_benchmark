@@ -99,6 +99,7 @@ int main(int argc, char **argv) {
 
   for (int i = 0; i < 1024; i++) {
     TEST(&memcpy, i);
+    TEST(&__folly_memcpy, i);
   }
   std::cout << "Done.\n";
 
