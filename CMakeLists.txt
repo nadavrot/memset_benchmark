@@ -34,9 +34,9 @@ include_directories(BEFORE
   )
 
 add_library(mem_shim SHARED
-            src/shims.c
-            src/calls.S
-            src/lib.c
+            src/memset/shims.c
+            src/memset/impl.S
+            src/memset/impl.c
            )
 
 set_target_properties(mem_shim PROPERTIES
@@ -45,7 +45,7 @@ set_target_properties(mem_shim PROPERTIES
      )
 
 add_library(mem_hist SHARED
-            src/memset_hist.c
+            src/memset/memset_hist.c
            )
 
 set_target_properties(mem_hist PROPERTIES
@@ -57,15 +57,15 @@ set_target_properties(mem_hist PROPERTIES
 target_compile_options(mem_hist PRIVATE "-fno-builtin")
 
 add_executable(bench_memset
-                 src/bench.cc
-                 src/calls.S
-                 src/lib.c
+                 src/memset/bench_memset.cc
+                 src/memset/impl.S
+                 src/memset/impl.c
                  )
 
 add_executable(test_memset
-                 src/test.cc
-                 src/calls.S
-                 src/lib.c
+                 src/memset/test_memset.cc
+                 src/memset/impl.S
+                 src/memset/impl.c
                  )
 
 target_link_libraries(bench_memset PUBLIC)
