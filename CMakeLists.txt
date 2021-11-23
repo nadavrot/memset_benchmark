@@ -34,3 +34,4 @@ include_directories(BEFORE
   )
 
 add_subdirectory(src/memset/)
+add_subdirectory(src/memcpy/)
