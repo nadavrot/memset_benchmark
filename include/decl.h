@@ -13,8 +13,7 @@ extern "C" {
 
 void *memcpy(void *dest, const void *src, size_t n);
 void *__folly_memcpy(void *dest, const void *src, size_t n);
-
-
+void *local_memcpy(void *dest, const void *src, size_t n);
 
 void *memset(void *s, int c, size_t n);
 void *libc_memset(void *s, int c, size_t n);
