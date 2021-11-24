@@ -31,6 +31,26 @@ void print_buffer(const char *start, const char *end, char val,
             << std::endl;
 }
 
+void print_buffer_match(const char *start0, const char *start1, size_t len,
+                        size_t error_at) {
+
+  for (size_t i = 0; i < len; i++) {
+    std::cout << start0[i];
+  }
+  std::cout << "\n";
+  for (size_t i = 0; i < len; i++) {
+    std::cout << start1[i];
+  }
+  std::cout << "\n";
+
+  for (size_t i = 0; i < error_at; i++) {
+    std::cout << " ";
+  }
+  std::cout << "^\n";
+  std::cout << "Comparing buffers of length " << len << ".";
+  std::cout << " Invalid value at index " << error_at << "." << std::endl;
+}
+
 // Make sure that the whole buffer, from \p start to \p end, is set to \p val.
 void assert_uniform_value(const char *start, const char *end, char val) {
   const char *ptr = start;
@@ -47,7 +67,7 @@ void assert_uniform_value(const char *start, const char *end, char val) {
 void assert_buffers_match(const char *buff1, const char *buff2, size_t len) {
   for (size_t i = 0; i < len; i++) {
     if (buff1[i] != buff2[i]) {
-      print_buffer(buff1, buff1 + len, buff2[i], &buff1[i]);
+      print_buffer_match(buff1, buff2, len, i);
       abort();
     }
   }
@@ -69,8 +89,8 @@ void test_impl(memcpy_ty handle, const std::string &name, unsigned chunk_size) {
       const char *dest_end = &*dest.end();
 
       const char *src_region_start = &src[src_offset];
-      const char *dest_region_start = &dest[dest_offset];
-      const char *dest_region_end = &dest[dest_offset + chunk_size];
+      char *dest_region_start = &dest[dest_offset];
+      char *dest_region_end = &dest[dest_offset + chunk_size];
 
       void *res =
           (handle)((void *)dest_region_start, src_region_start, chunk_size);
@@ -101,6 +121,7 @@ int main(int argc, char **argv) {
     TEST(&memcpy, i);
     TEST(&__folly_memcpy, i);
     TEST(&local_memcpy, i);
+    TEST(&asm_memcpy, i);
   }
 
   std::cout << "Done.\n";
