@@ -27,6 +27,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -fno-omit-frame-pointe
 
 # Place all of the binaries in the build directory.
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 include_directories(BEFORE
   ${CMAKE_CURRENT_BINARY_DIR}/include
@@ -35,3 +36,4 @@ include_directories(BEFORE
 
 add_subdirectory(src/memset/)
 add_subdirectory(src/memcpy/)
+add_subdirectory(src/utils/)

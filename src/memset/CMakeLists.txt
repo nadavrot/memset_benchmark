@@ -9,18 +9,6 @@ set_target_properties(mem_shim PROPERTIES
      SOVERSION 1
      )
 
-add_library(mem_hist SHARED
-            memset_hist.c
-           )
-
-set_target_properties(mem_hist PROPERTIES
-     VERSION ${PROJECT_VERSION}
-     SOVERSION 1
-     )
-
-
-target_compile_options(mem_hist PRIVATE "-fno-builtin")
-
 add_executable(bench_memset
                  bench_memset.cc
                  impl.S
