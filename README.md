@@ -24,6 +24,8 @@ value, this benchmark is more realistic and takes into account mispredicted
 branches and the performance of the cpu decoder. The buffers are in the size
 range 0 to 256. The random function is made of pre-computed random values, to
 lower the overhead of the random function.  This was suggested by Yann Collet.
+The 'nop' function is used to compute the benchmark setup overhead and call
+overhead, and the nop-cost is subtracted from all figures.
 
 ![memset](docs/memset_r.png) ![memcpy](docs/memcpy_r.png)
 
