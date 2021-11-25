@@ -75,20 +75,23 @@ void bench_rand_range(const std::vector<memcpy_ty *> &toTest) {
   std::cout << std::endl;
 }
 
+// To measure the call overhead.
+void *nop(void *dest, const void *src, size_t n) { return dest; }
+
 int main(int argc, char **argv) {
   std::cout << std::setprecision(3);
   std::cout << std::fixed;
 
-  std::vector<memcpy_ty *> toTest = {&libc_memcpy, &memcpy, &__folly_memcpy, &local_memcpy,
-                                     &asm_memcpy};
+  std::vector<memcpy_ty *> toTest = {
+      &libc_memcpy, &memcpy, &__folly_memcpy, &local_memcpy, &asm_memcpy, &nop};
 
   std::cout << "Batches of random sizes:\n";
-  std::cout << "libc@plt, libc-direct, folly, c_memcpy, asm_memcpy,\n";
+  std::cout << "libc@plt, libc, folly, c_memcpy, asm_memcpy, nop,\n";
 
   bench_rand_range(toTest);
 
   std::cout << "\nFixed size:\n";
-  std::cout << "size, libc-direct, folly, c_memcpy, asm_memcpy,\n";
+  std::cout << "size, libc@plt, libc, folly, c_memcpy, asm_memcpy, nop,\n";
 
   for (int i = 0; i < 512; i++) {
     bench_impl(toTest, i, 16, 0);

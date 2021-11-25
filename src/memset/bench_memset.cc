@@ -69,19 +69,22 @@ void bench_rand_range(const std::vector<memset_ty *> &toTest) {
   std::cout << std::endl;
 }
 
+// To measure the call overhead.
+void *nop(void *s, int c, size_t n) { return s; }
+
 int main(int argc, char **argv) {
   std::cout << std::setprecision(3);
   std::cout << std::fixed;
 
-  std::vector<memset_ty *> toTest = {musl_memset, libc_memset, &memset,
-                                     local_memset, asm_memset};
+  std::vector<memset_ty *> toTest = {musl_memset,  libc_memset, &memset,
+                                     local_memset, asm_memset,  &nop};
 
   std::cout << "Batches of random sizes:\n";
-  std::cout << " musl, libc@plt, libc-direct, c_memset, asm_memset,\n";
+  std::cout << " musl, libc@plt, libc, c_memset, asm_memset, nop,\n";
   bench_rand_range(toTest);
 
   std::cout << "\nFixed size:\n";
-  std::cout << "size, musl, libc@plt, libc-direct, c_memset, asm_memset,\n";
+  std::cout << "size, musl, libc@plt, libc, c_memset, asm_memset, nop,\n";
 
   for (int i = 0; i < 512; i++) {
     bench_impl(toTest, i, 16, 0);
