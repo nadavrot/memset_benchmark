@@ -77,11 +77,11 @@ int main(int argc, char **argv) {
                                      local_memset, asm_memset};
 
   std::cout << "Batches of random sizes:\n";
-  std::cout << " musl, libc@plt, libc-direct, c_memset, asm_memset\n";
+  std::cout << " musl, libc@plt, libc-direct, c_memset, asm_memset,\n";
   bench_rand_range(toTest);
 
   std::cout << "\nFixed size:\n";
-  std::cout << "size, musl, libc@plt, libc-direct, c_memset, asm_memset\n";
+  std::cout << "size, musl, libc@plt, libc-direct, c_memset, asm_memset,\n";
 
   for (int i = 0; i < 512; i++) {
     bench_impl(toTest, i, 16, 0);
