@@ -1,3 +1,18 @@
+#if defined(__APPLE__)
+.text
+.global _libc_memcpy
+.p2align  4, 0x90
+_libc_memcpy:
+        jmp _memcpy
+
+#else
+
+.text
+.global libc_memcpy
+.p2align  4, 0x90
+libc_memcpy:
+        jmp memcpy
+#endif
 
 #define LABEL(x)     .L##x
 #if defined(__APPLE__)
