@@ -96,20 +96,24 @@ LABEL(over_64):
   cmp    $128, %rdx
   jae LABEL(over_128)
 
+  // Copy the last wide word.
+  vmovups  -32(%rsi,%rdx), %ymm0
+
   // Handle cases in the range 64 to 128. This is two unconditional
   // stores (64), 1 conditional store (32), and the one 32 byte store at
   // the end.
-  vmovups  (%rsi), %ymm0
-  vmovups  %ymm0, (%rax)
-  vmovups  32(%rsi), %ymm0
-  vmovups  %ymm0, 32(%rax)
+  vmovups  (%rsi), %ymm1
+  vmovups  32(%rsi), %ymm2
+
   cmp    $96, %rdx
   jbe    LABEL(64_to_128_done)
-  vmovups  64(%rsi), %ymm0
-  vmovups  %ymm0, 64(%rax)
+  vmovups  64(%rsi), %ymm3
+  vmovups  %ymm3, 64(%rax)
+
 LABEL(64_to_128_done):
-  // Copy the last wide word.
-  vmovups  -32(%rsi,%rdx), %ymm0
+  vmovups  %ymm1, (%rax)
+  vmovups  %ymm2, 32(%rax)
+  // Store the last wide word.
   vmovups  %ymm0, -32(%rax,%rdx)
   vzeroupper
   retq
