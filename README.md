@@ -24,7 +24,7 @@ range 0 to 256. The random function is made of pre-computed random values, to
 lower the overhead of the random function.  This was suggested by Yann Collet
 (@Cyan4973).
 
-![Benchmark](docs/rand.png)
+![memset](docs/memset_r.png) ![memcpy](docs/memcpy_r.png)
 
 The size of the buffer that memset and memcpy mutates is typically small. The
 picture below presents the buffer length distribution in google-chrome. Vim,
