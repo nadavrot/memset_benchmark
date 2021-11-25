@@ -12,7 +12,11 @@ The charts below compare the implementations in this repo with other
 implementations: folly, musl, and glibc.  The glibc implementations are measured
 with and without the elf indirection, as suggested by Dave Zarzycki).
 
-![Memset](docs/memset_bench.png) ![Memcpy](docs/memcpy_bench.png)
+## Memset
+![Memset](docs/memset_bench.png)
+
+## Memcpy
+![Memcpy](docs/memcpy_bench.png)
 
 The chart below compares the performance of different memset implementations on
 buffers of varying sizes and offsets. Unlike the hot loop that hammers a single
