@@ -94,7 +94,7 @@ LABEL(16_to_32):
   // Handle buffers over 64 bytes:
 LABEL(over_64):
   cmp    $128, %rdx
-  jae LABEL(over_128)
+  ja LABEL(over_128)
 
   // Copy the last wide word.
   vmovups  -32(%rsi,%rdx), %ymm0
@@ -110,6 +110,7 @@ LABEL(over_64):
   vmovups  64(%rsi), %ymm3
   vmovups  %ymm3, 64(%rax)
 
+.align 4
 LABEL(64_to_128_done):
   vmovups  %ymm1, (%rax)
   vmovups  %ymm2, 32(%rax)
