@@ -4,25 +4,22 @@ This repository contains high-performance implementations of memset and memcpy
 for x86. These implementations outperform the folly and glibc implementations.
 This repository contains several reference implementations in C and assembly.
 
-
 Before reading the source code in this repository you probably want to read an
 excellent blog [post](https://msrc-blog.microsoft.com/2021/01/11/building-faster-amd64-memset-routines/)
 by Joe Bialek.
 
-The chart below compares this code with the musl memset implementation and two
-glibc memset configurations (with and without elf indirection, as suggested by
-Dave Zarzycki). The benchmark also shows the two memset implementations from
-this project.
+The charts below compare the implementations in this repo with other
+implementations: folly, musl, and glibc.  The glibc implementations are measured
+with and without the elf indirection, as suggested by Dave Zarzycki).
 
-![Benchmark](docs/bench.png)
+![Memset](docs/memset_bench.png) ![Memcpy](docs/memcpy_bench.png)
 
 The chart below compares the performance of different memset implementations on
 buffers of varying sizes and offsets. Unlike the hot loop that hammers a single
 value, this benchmark is more realistic and takes into account mispredicted
 branches and the performance of the cpu decoder. The buffers are in the size
 range 0 to 256. The random function is made of pre-computed random values, to
-lower the overhead of the random function.  This was suggested by Yann Collet
-(@Cyan4973).
+lower the overhead of the random function.  This was suggested by Yann Collet.
 
 ![memset](docs/memset_r.png) ![memcpy](docs/memcpy_r.png)
 
