@@ -16,6 +16,10 @@ uint32_t memset_len_dist[32] = {
 uint32_t memcpy_len_dist[32] = {
     0,
 };
+uint32_t align_dist[32] = {
+    0,
+};
+
 
 const int tab32[32] = {0,  9,  1,  10, 13, 21, 2,  29, 11, 14, 16,
                        18, 22, 25, 3,  30, 8,  12, 20, 28, 15, 17,
@@ -38,15 +42,17 @@ void __attribute__((destructor)) print_hitograms() {
   pid_t pid = getpid();
 
   fprintf(ff, "Histogram for (%d):\n", pid);
-  fprintf(ff, "size, memset, memcpy:\n");
+  fprintf(ff, "size, memset, memcpy, alignment:\n");
   for (int i = 0; i < 32; i++) {
-    fprintf(ff, "%d, %d, %d,\n", i, memset_len_dist[i], memcpy_len_dist[i]);
+    fprintf(ff, "%d, %d, %d, %d,\n", i, memset_len_dist[i], memcpy_len_dist[i], align_dist[i]);
   }
   fclose(ff);
 }
 
 void *memcpy(void *dest, const void *src, size_t len) {
   memcpy_len_dist[log2_32(len)]++;
+  align_dist[(unsigned long)dest % 32]++;
+  align_dist[(unsigned long)src % 32]++;
   char *d = (char *)dest;
   char *s = (char *)src;
   for (size_t i = 0; i < len; i++) {
@@ -57,6 +63,7 @@ void *memcpy(void *dest, const void *src, size_t len) {
 
 void *memset(void *s, int c, size_t len) {
   memset_len_dist[log2_32(len)]++;
+  align_dist[(unsigned long)s % 32]++;
   char *p = s;
 
   for (int i = 0; i < len; i++) {

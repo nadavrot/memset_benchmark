@@ -37,6 +37,14 @@ chart represent the power of two buffer size (10 represents the values between
  
 ![Histogram](docs/hist.png)
 
+
+The chart below presents a histogram of pointer alignment (from the minecraft
+game). Most of the pointers that are called by memset and memcpy are aligned to
+8-byte values.
+
+![Pointer Alignment](docs/align.png)
+
+
 The repository contains a few utilities for testing and measuring the
 performance and correctness of memset and memcpy.
 
