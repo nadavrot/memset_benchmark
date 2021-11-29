@@ -18,12 +18,12 @@ libc_memset:
 #if defined(__APPLE__)
 .text
 .global _asm_memset
-.p2align  16, 0x90
+.p2align  5, 0x90
 _asm_memset:
 #else
 .text
 .global asm_memset
-.p2align  16, 0x90
+.p2align  5, 0x90
 asm_memset:
 #endif
 
@@ -69,8 +69,7 @@ LABEL(below_4):
         mov     %sil, 0x1(%rdi)
         mov     %sil, 0x2(%rdi)
         mov    %rdi,%rax
-        vzeroupper
-        retq
+.align 4
 LABEL(exit):
         vzeroupper
         retq
