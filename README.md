@@ -1,5 +1,7 @@
 # Fast Memset and Memcpy implementations
 
+*UPDATE*: Ilya Albrecht landed the memset implementation from this repo into [Folly](https://github.com/facebook/folly/blob/main/folly/memset.S).
+
 This repository contains high-performance implementations of memset and memcpy.
 These implementations outperform the folly and glibc implementations.  This
 repository contains several reference implementations in C and assembly.  The
